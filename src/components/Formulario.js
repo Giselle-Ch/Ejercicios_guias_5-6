@@ -1,11 +1,10 @@
 import React, {useState} from "react";
 import { Text, StyleSheet, View, TextInput, Button, TouchableHighlight, Alert, ScrollView } from 'react-native';
-import Picker from '@react-native-community/picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import shortid from 'shortid';
 
 
-const Formulario = ({reserva, setReserva, guardarMostrarForm, guardarReservaStorage}) => {
+const Formulario = ({reservas, setReserva, guardarMostrarForm, guardarReservasStorage}) => {
     //Variables
     const [cliente, guardarCliente] = useState('');
     const [fecha, guardarFecha] = useState('');
@@ -42,7 +41,7 @@ const Formulario = ({reserva, setReserva, guardarMostrarForm, guardarReservaStor
 
     const confirmarHora = hora => {
         const opciones = {hour: 'numeric', minute: '2-digit', hour12: false};
-        guardarHora(hora.tolocaleString('es-ES', opciones));
+        guardarHora(hora.toLocaleString('es-ES', opciones));
     }
 
     //  Crear nueva reserva
@@ -53,22 +52,35 @@ const Formulario = ({reserva, setReserva, guardarMostrarForm, guardarReservaStor
             return;
         }
 
-        const reserva = {cliente, fecha, hora, cantidad, seccion};
+        if(seccion.trim() == 'Fumadores' || seccion.trim() == 'No fumadores')
+        {
+        
+            const reserva = {cliente, fecha, hora, cantidad, seccion};
 
-        reserva.id = shortid.generate();
+            reserva.id = shortid.generate();
 
-        const reservaNueva = [...reservas, reserva];
-        setReserva(reservaNueva);
+            const reservaNueva = [...reservas, reserva];
+            setReserva(reservaNueva);
 
-        guardarReservaStorage(JSON.stringify(reservaNueva));
+            guardarReservasStorage(JSON.stringify(reservaNueva));
 
-        guardarMostrarForm(false);
+            guardarMostrarForm(false);
 
-        guardarCliente('');
-        guardarFecha('');
-        guardarHora('');
-        guardarCantidad('');
-        guardarSeccion('');
+            guardarCliente('');
+            guardarFecha('');
+            guardarHora('');
+            guardarCantidad('');
+            guardarSeccion('');
+        } else {
+            Alert.alert(
+                'Error',            //  Titulo
+                'Por favor escriba una de las secciones disponibles: Fumadores | No fumadores',    //  Mensaje
+                [{
+                    text: 'OK'      //  Botón
+                }]
+            )
+            return; 
+        }
     }
 
     const mostrarAlerta = () => {
@@ -131,6 +143,11 @@ const Formulario = ({reserva, setReserva, guardarMostrarForm, guardarReservaStor
                 </View>
 
                 <View>
+                    <Text style={styles.label}>Sección (Fumadores | No fumadores): </Text>
+                    <TextInput style={styles.input} onChangeText={texto => guardarSeccion(texto)} />
+                </View>
+
+               {/*  <View>
                     <Picker
                         selectedValue={seccion}
                         onValueChange={(itemValue, itemIndex) => guardarSeccion(itemValue)}    
@@ -138,7 +155,7 @@ const Formulario = ({reserva, setReserva, guardarMostrarForm, guardarReservaStor
                         <Picker.Item label="No Fumadores" value="noFumadores" />
                         <Picker.Item label="Fumadores" value="fumadores" />
                     </Picker>
-                </View>
+                </View> */}
 
                 <View>
                     <TouchableHighlight onPress={() => crearNuevaReserva()} style={styles.btnSubmit}>
@@ -174,7 +191,7 @@ const styles = StyleSheet.create({
 
     btnSubmit: {
         padding: 10,
-        backgroundColor: 'lightblue',
+        backgroundColor: '#283d3b',
         marginVertical: 10
     },
     

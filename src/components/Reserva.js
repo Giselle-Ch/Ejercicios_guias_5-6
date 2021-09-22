@@ -15,12 +15,7 @@ const Reserva = ({item, eliminarCliente}) => {
             </View>
 
             <View>
-                <Text style={styles.label}>Fecha: </Text>
-                <Text style={styles.texto}>{item.fecha}</Text>
-            </View>
-
-            <View>
-                <Text style={styles.label}>Hora: </Text>
+                <Text style={styles.label}>Fecha y Hora: </Text>
                 <Text style={styles.texto}>{item.hora}</Text>
             </View>
 
@@ -65,14 +60,16 @@ const styles = StyleSheet.create({
 
     btnEliminar: {
         padding: 20,
-        backgroundColor: 'red',
+        backgroundColor: '#c44536',
+        borderRadius: 5,
         marginVertical: 10
     },
 
     textoEliminar: {
         color: '#fff',
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 18
     }
 })
 

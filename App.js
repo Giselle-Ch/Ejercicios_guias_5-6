@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { Text, StyleSheet, View, FlatList, TouchableHighlight, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
+import { Text, StyleSheet, View, FlatList, TouchableHighlight, TouchableWithoutFeedback, Keyboard, Platform, ScrollView } from 'react-native';
 
 import Reserva from "./src/components/Reserva";
 import Formulario from "./src/components/Formulario";
@@ -23,7 +23,7 @@ const App = () => {
     obtenerReservasStorage();
   }, []);
 
-  const eliminarPaciente = id => {
+  const eliminarCliente = id => {
     const reservasFiltradas = reservas.filter(reserva => reserva.id !== id);
     setReservas(reservasFiltradas);
     guardarReservasStorage(JSON.stringify(reservasFiltradas));
@@ -46,9 +46,10 @@ const App = () => {
   }
 
   return(
+    <ScrollView>
     <TouchableWithoutFeedback onPress={() => cerrarTeclado()}>
       <View style={styles.contenido}>
-        <Text style={styles.titulo}>Administrador de Citas</Text>
+        <Text style={styles.titulo}>Administrador de Reservas</Text>
         <View>
           <TouchableHighlight onPress={() => mostrarFormulario()} style={styles.btnMostrarForm}>
             <Text style={styles.textoMostrarForm}>{mostrarform ? 'Cancelar Crear Reserva' : 'Crear Nueva Reserva'}</Text>
@@ -60,8 +61,8 @@ const App = () => {
             <>
               <Text style={styles.titulo}>Crear Nueva Reserva</Text>
               <Formulario
-                reservas={reserva}
-                setReserva={setReserva}
+                reservas={reservas}
+                setReserva={setReservas}
                 guardarMostrarForm={guardarMostrarForm}
                 guardarReservasStorage={guardarReservasStorage}
               />
@@ -73,7 +74,7 @@ const App = () => {
                 style={styles.listado}
                 data={reservas}
                 renderItem={({item}) => <Reserva item={item}
-                eliminarPaciente={eliminarCliente} />}
+                eliminarCliente={eliminarCliente} />}
                 keyExtractor={reserva => reserva.id}
               />
             </>
@@ -81,43 +82,47 @@ const App = () => {
         </View>
       </View>
     </TouchableWithoutFeedback>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   contenedor: {
-    backgroundColor: 'lightblue',
+    backgroundColor: '#772e25',
     flex: 1
   },
 
   titulo: {
-    color: '#fff',
-    marginTop: Platform.OS === 'ios' ? 40 : 20,
+    color: '#283d3b',
+    marginTop: Platform.OS === 'ios' ? 40 : 40,
     marginBottom: 20,
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center'
   },
 
+
   contenido: {
     flex: 1,
-    marginHorizontal: '2.5%'
+    backgroundColor: '#faf0ca' 
   },
 
   listado: {
-    flex: 1
+    flex: 1,
+    marginHorizontal: 10
   },
 
   btnMostrarForm: {
     padding: 10,
-    backgroundColor: 'lightblue',
+    backgroundColor: '#197278',
     marginVertical: 10
   },
 
   textoMostrarForm: {
     color: '#fff',
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontSize: 18
   }
 });
 
